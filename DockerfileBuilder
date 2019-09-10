@@ -1,0 +1,12 @@
+FROM clearlinux:latest
+
+ARG AGENT_USER
+ARG AGENT_PASSWORD
+
+RUN swupd bundle-add openssh-server python3-basic java-runtime git
+RUN useradd $AGENT_USER
+RUN usermod --password `openssl passwd $AGENT_PASSWORD` $AGENT_USER
+RUN usermod -aG wheel $AGENT_USER
+RUN python3 -m virtualenv /home/$AGENT_USER/ansible-env
+RUN /home/$AGENT_USER/ansible-env/bin/pip3 install ansible
+RUN /usr/sbin/ssh-keygen -A

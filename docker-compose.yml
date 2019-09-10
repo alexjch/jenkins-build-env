@@ -1,0 +1,19 @@
+version: '3.2'
+services:
+    builder:
+        build:
+            context: ${PWD}
+            dockerfile: DockerfileBuilder
+            args:
+                AGENT_PASSWORD: ${AGENT_PASSWORD}
+                AGENT_USER: ${AGENT_USER}
+        command: bash -c '/usr/sbin/sshd ; tail -f /dev/null'
+    jenkins:
+        image: jenkins/jenkins:lts
+        depends_on:
+            - "builder"
+        ports:
+            - 8080:8080
+            - 50000:50000
+        volumes:
+            - ./data:/var/jenkins/data
