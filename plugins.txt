@@ -1,0 +1,7 @@
+configuration-as-code:latest
+git:latest
+ssh-slaves:latest
+ssh-credentials:latest
+credentials:latest
+credentials-binding:latest
+workflow-aggregator:latest

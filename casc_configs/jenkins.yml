@@ -1,0 +1,40 @@
+jenkins:
+  systemMessage: "Jenkins automated installation\n"
+  numExecutors: 5
+  scmCheckoutRetryCount: 2
+  mode: NORMAL
+
+  nodes:
+    - permanent:
+        labelString: "builder setup"
+        mode: NORMAL
+        name: "builder"
+        numExecutors: 4
+        remoteFS: "/home/${AGENT_USER}"
+        launcher:
+          ssh:
+            host: "builder"
+            port: 22
+            credentialsId: 'builder-credentials'
+            launchTimeoutSeconds: 60
+            maxNumRetries: 3
+            retryWaitTime: 30
+            sshHostKeyVerificationStrategy:
+              manuallyTrustedKeyVerificationStrategy:
+                requireInitialManualTrust: false
+
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+          - usernamePassword:
+              scope: GLOBAL
+              id: "builder-credentials"
+              username: ${AGENT_USER}
+              password: ${AGENT_PASSWORD}
+              description: "Username/Password Credentials for builder"
+
+unclassified:
+  location:
+    adminAddress: you@example.com
+    url: http://localhost:8080

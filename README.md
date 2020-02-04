@@ -1,49 +1,33 @@
-## Jenkings builder environment
+## Jenkins builder environment
 
-Basic jenkins + builder infrastructure configuration.
-
-# Usage
-
-To start using the environment we need to build the environment, start it, and
-finalize the environment configuration.
+Containerized CI infrastructure to test pipelines locally. To start using
+the environment we need to build it first. Assuming that docker-compose is
+available in the system start by cloning the *infrastructure code*:
 
 ```
+# Clone infrastructure definition code
+https://github.com/alexjch/jenkins-build-env.git
+
+cd jenkins-build-env
+
 # Build environment
-
-AGENT_PASSWORD=worker AGENT_USER=worker docker-compose build --force-rm
-
-# Run newly create enironment
-
-AGENT_USER=worker AGENT_PASSWORD=worker docker-compose up
-
-# Message after successful Jenkins start
-
-jenkins_1  | *************************************************************
-jenkins_1  | *************************************************************
-jenkins_1  | *************************************************************
-jenkins_1  | 
-jenkins_1  | Jenkins initial setup is required. An admin user has been created and a password generated.
-jenkins_1  | Please use the following password to proceed to installation:
-jenkins_1  | 
-jenkins_1  | 3aed00a32f164c52907daeee16c279cc
-jenkins_1  | 
-jenkins_1  | This may also be found at: /var/jenkins_home/secrets/initialAdminPassword
-jenkins_1  | 
-jenkins_1  | *************************************************************
-jenkins_1  | *************************************************************
-jenkins_1  | *************************************************************
+AGENT_USER=<a user> AGENT_PASSWORD=<a password> docker-compose build --force-rm
 ```
 
-# Post setup
-
-After the environment is up and running the worker node needs to be added to
-Jenkins.
-
-```
-Name:                     builder
-Remote root directory:    /home/worker
-Host:                     builder
-Credentials:              worker/worker
-Host Key Verification Strategy: No verifying Verification Strategy
+```AGENT_PASSWORD``` and ```AGENT_USER``` are credentials used for the builder
+node, make a note of the values used in these fields for later. Once the
+environment is done building we start it with:
 
 ```
+# Run newly created environment
+AGENT_USER=<a user> AGENT_PASSWORD=<the password> docker-compose up
+```
+
+The source provides an .env file with defaults for ```AGENT_USER``` and 
+```AGENT_PASSWORD``` if none is provided.
+
+
+### References
+* https://hub.docker.com/r/jenkins/jenkins
+* https://docs.01.org/clearlinux/latest/
+* https://jenkins.io/projects/jcasc/
